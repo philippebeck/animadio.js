@@ -1,0 +1,22 @@
+{
+  "name": "animadio.js",
+  "version": "0.1.0",
+  "description": "Animadio JavaScript Tool who create Classes with Input Events",
+  "keywords": [
+    "JavaScript",
+    "Animadio",
+    "Classes",
+    "Input",
+    "Events"
+  ],
+  "license": "MIT",
+  "main": "animadio.js",
+  "homepage": "https://animadio.org",
+  "repository": "github:animadio/animadio.js",
+  "bugs": "https://github.com/animadio/animadio.js/issues",
+  "author": {
+    "name": "Philippe Beck",
+    "email": "philippe@philippebeck.net",
+    "url": "https://philippebeck.net"
+  }
+}
