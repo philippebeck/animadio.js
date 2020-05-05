@@ -81,7 +81,6 @@ class Animadio {
       this.setDuration(i);
       this.setCount(i);
     }
-    console.log(this.duration);
     window.setTimeout(this.removeClasses.bind(this), this.duration);
   }
 
