@@ -41,12 +41,15 @@ class Animadio {
 
   clickCheckBtn() {
     this.check.setAttribute("disabled", true);
+
+    for (let i = 0; i < this.inputCount; i++) {
+      this.inputs[i].setAttribute("disabled", true);
+    }
     this.AddAllClasses();
   }
 
   AddAllClasses() {
     for (let i = 0; i < this.inputCount; i++) {
-
       if (this.inputs[i].value) {
         this.addClass(i);
       }
@@ -98,10 +101,10 @@ class Animadio {
     this.duration       = this.durationBase;
 
     for (let i = 0; i < this.inputCount; i++) {
-
       if (this.inputs[i].value) {
         this.removeClass(i);
       }
+      this.inputs[i].removeAttribute("disabled");
     }
     this.check.removeAttribute("disabled");
   }
