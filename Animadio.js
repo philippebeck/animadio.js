@@ -3,9 +3,10 @@
 class Animadio {
   /**
    * @param {Object} input
+   * @param {string} key
    * @param {Object} duration
    */
-  constructor(input, duration = [0, {}, {}]) {
+  constructor(input, key, duration = [5000, {}, {}]) {
     this.inputIds   = input;
     this.inputCount = input.length;
     this.input      = [];
@@ -15,9 +16,9 @@ class Animadio {
     this.countValues    = duration[1];
     this.durationValues = duration[2];
 
-    this.check  = document.getElementById("check");
-    this.hub    = document.getElementById("hub");
-    this.goal   = document.getElementById("goal");
+    this.check  = document.getElementById(key + "-check");
+    this.hub    = document.getElementById(key + "-hub");
+    this.goal   = document.getElementById(key + "-goal");
 
     this.getValues();
     this.check.addEventListener("click", this.clickCheckBtn.bind(this));
@@ -81,7 +82,6 @@ class Animadio {
       this.setDuration(i);
       this.setCount(i);
     }
-    console.log(this.duration);
     window.setTimeout(this.removeClasses.bind(this), this.duration);
   }
 
