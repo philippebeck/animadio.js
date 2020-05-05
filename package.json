@@ -12,11 +12,15 @@
   "license": "MIT",
   "main": "animadio.js",
   "homepage": "https://animadio.org",
-  "repository": "github:animadio/animadio.js",
-  "bugs": "https://github.com/animadio/animadio.js/issues",
-  "author": {
-    "name": "Philippe Beck",
-    "email": "philippe@philippebeck.net",
-    "url": "https://philippebeck.net"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/animadio/animadio.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/animadio/animadio.js/issues"
+  },
+  "author": "Philippe Beck <philippe@philippebeck.net> (https://philippebeck.net)",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
