@@ -1,12 +1,46 @@
+/*! animadio.js v0.1.5 | https://animadio.org | MIT License */
+
 "use strict";
 
 class Animadio {
+  /**
+   * @param min
+   * @param max
+   * @return
+   */
+  getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  /**
+   * @param selector
+   * @return
+   */
+  getElement(selector) {
+    return document.querySelector(selector);
+  }
+
+  /**
+   * @param selector
+   * @param type
+   * @param listener
+   */
+  installEventListener(selector, type, listener) {
+    var element;
+    element = document.querySelector(selector);
+    element.addEventListener(type, listener);
+  }
+}
+
+class Input extends Animadio {
   /**
    * @param {Object} inputs
    * @param {Object} elements
    * @param {Object} duration
    */
   constructor(inputs, elements = ["animadio", ["trigger"]], duration = [2000, {}, {}]) {
+    super();
+
     this.inputIds   = inputs;
     this.inputCount = inputs.length;
     this.inputs     = [];
@@ -33,14 +67,6 @@ class Animadio {
       this.classes[elementIndex] = this.getElement("#" + this.mainElement + "-" + this.elements[elementIndex]);
     }
     this.mainClass = this.classes[0];
-  }
-
-  /**
-   * @param {string} selector
-   * @return {Object}
-   */
-  getElement(selector) {
-    return document.querySelector(selector);
   }
 
   getAllValues() {
@@ -134,3 +160,106 @@ class Animadio {
     this.mainClass.removeAttribute("disabled");
   }
 }
+
+class Slider extends Animadio {
+  constructor(slides) {
+    super();
+
+    this.slides = slides;
+    this.state  = {index: -1, timer: window.setInterval(this.nextSlide.bind(this), 5000)};
+
+    this.installEventListener("#slider-random", "click", this.randomSlide.bind(this));
+    this.installEventListener("#slider-previous", "click", this.previousSlide.bind(this));
+    this.installEventListener("#slider-next", "click", this.nextSlide.bind(this));
+    this.installEventListener("#slider-toggle", "click", this.autoSlide.bind(this));
+    this.installEventListener("#toolbar-toggle", "click", this.showToolbar.bind(this));
+  }
+
+  nextSlide() {
+    this.state.index++;
+
+    if (this.state.index === this.slides.length) {
+      this.state.index = 0;
+    }
+    this.refreshSlide();
+  }
+
+  previousSlide() {
+    this.state.index--;
+
+    if (this.state.index < 0) {
+      this.state.index = this.slides.length - 1;
+    }
+    this.refreshSlide();
+  }
+
+  randomSlide() {
+    let index;
+
+    do {
+      index = this.getRandomInteger(0, this.slides.length - 1);
+    }
+    while (index === this.state.index);
+
+    this.state.index = index;
+
+    this.refreshSlide();
+  }
+
+  autoSlide() {
+    let icon;
+    let toggle;
+
+    icon    = this.getElement("#slider-toggle i");
+    toggle  = this.getElement("#slider-toggle");
+
+    icon.classList.toggle("fa-play");
+    icon.classList.toggle("fa-pause");
+
+    if (this.state.timer == null) {
+      this.state.timer = window.setInterval(this.nextSlide.bind(this), 5000);
+
+      toggle.title = "Pause";
+    } else {
+      window.clearInterval(this.state.timer);
+
+      this.state.timer  = null;
+      toggle.title      = "Play";
+    }
+  }
+
+  showToolbar() {
+    let icon;
+    let toggle;
+    let nav;
+
+    icon    = this.getElement("#toolbar-toggle i");
+    toggle  = this.getElement("#toolbar-toggle");
+    nav     = this.getElement(".slider-nav ul");
+
+    icon.classList.toggle("fa-toggle-on");
+    icon.classList.toggle("fa-toggle-off");
+
+    nav.classList.toggle("none");
+
+    if (nav.classList.contains("none")) {
+      toggle.title = "Open the Slider Toolbar";
+    } else {
+      toggle.title = "Close the Slider Toolbar";
+    }
+  }
+
+  refreshSlide() {
+    let sliderImage;
+    let sliderLegend;
+
+    sliderImage  = this.getElement("#slider img");
+    sliderLegend = this.getElement("#slider figcaption");
+
+    sliderImage.src          = this.slides[this.state.index].image;
+    sliderLegend.textContent = this.slides[this.state.index].legend;
+  }
+}
+
+/*! Author: Philippe Beck <philippe@philippebeck.net>
+ Updated: 6th May 2020 @ 9:18:59 PM */

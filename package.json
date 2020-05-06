@@ -1,16 +1,17 @@
 {
   "name": "animadio.js",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Animadio JavaScript Tool who create Classes with Input Events",
   "keywords": [
     "JavaScript",
     "Animadio",
     "Classes",
     "Input",
-    "Events"
+    "Events",
+    "Slider"
   ],
   "license": "MIT",
-  "main": "animadio.js",
+  "main": "dist/animadio.js",
   "homepage": "https://animadio.org",
   "repository": {
     "type": "git",
@@ -19,7 +20,16 @@
   "bugs": {
     "url": "https://github.com/animadio/animadio.js/issues"
   },
-  "author": "Philippe Beck <philippe@philippebeck.net> (https://philippebeck.net)",
+  "devDependencies": {
+    "grunt": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-uglify": "^4.0.1"
+  },
+  "author": {
+    "name": "Philippe Beck",
+    "email": "philippe@philippebeck.net",
+    "url": "https://philippebeck.net"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   }
