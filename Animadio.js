@@ -45,7 +45,7 @@ class Animadio {
 
   getAllValues() {
     for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
-      this.inputs[inputIndex] = document.getElementById(this.inputIds[inputIndex]);
+      this.inputs[inputIndex] = this.getElement("#" + this.inputIds[inputIndex]);
       this.inputs[inputIndex].addEventListener("input", this.getValue.bind(this, inputIndex));
     }
   }
@@ -64,32 +64,32 @@ class Animadio {
     for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
       this.inputs[inputIndex].setAttribute("disabled", true);
     }
-    this.AddAllClasses();
+    this.AddClasses();
   }
 
-  AddAllClasses() {
+  AddClasses() {
     for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
       if (this.inputs[inputIndex].value) {
-        this.addClass(inputIndex);
+        this.toggleClass(inputIndex);
       }
-      this.setAllDurations(inputIndex);
+      this.setAllDuration(inputIndex);
     }
-    window.setTimeout(this.removeAllClasses.bind(this), this.duration);
+    window.setTimeout(this.removeClasses.bind(this), this.duration);
   }
 
   /**
    * @param {number} inputIndex
    */
-  addClass(inputIndex) {
+  toggleClass(inputIndex) {
     for (let elementIndex = 0; elementIndex < this.elementCount; elementIndex++) {
-      this.classes[elementIndex].classList.add(this.inputs[inputIndex].value + "-" + this.elements[elementIndex]);
+      this.classes[elementIndex].classList.toggle(this.inputs[inputIndex].value + "-" + this.elements[elementIndex]);
     }
   }
 
   /**
    * @param {number} inputIndex
    */
-  setAllDurations(inputIndex) {
+  setAllDuration(inputIndex) {
     if (this.durationValues) {
       this.setDuration(inputIndex);
     }
@@ -121,25 +121,16 @@ class Animadio {
     }
   }
 
-  removeAllClasses() {
+  removeClasses() {
     this.mainClass.checked  = false;
     this.duration           = this.durationBase;
 
     for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
       if (this.inputs[inputIndex].value) {
-        this.removeClass(inputIndex);
+        this.toggleClass(inputIndex);
       }
       this.inputs[inputIndex].removeAttribute("disabled");
     }
     this.mainClass.removeAttribute("disabled");
-  }
-
-  /**
-   * @param {number} inputIndex
-   */
-  removeClass(inputIndex) {
-    for (let elementIndex = 0; elementIndex < this.elementCount; elementIndex++) {
-      this.classes[elementIndex].classList.remove(this.inputs[inputIndex].value + "-" + this.elements[elementIndex]);
-    }
   }
 }
