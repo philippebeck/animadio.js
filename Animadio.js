@@ -3,118 +3,143 @@
 class Animadio {
   /**
    * @param {Object} inputs
-   * @param {string} key
+   * @param {Object} elements
    * @param {Object} duration
    */
-  constructor(inputs, key, duration = [5000, {}, {}]) {
+  constructor(inputs, elements = ["animadio", ["trigger"]], duration = [2000, {}, {}]) {
     this.inputIds   = inputs;
     this.inputCount = inputs.length;
     this.inputs     = [];
+
+    this.mainElement  = elements[0];
+    this.elements     = elements[1];
+    this.elementCount = elements[1].length;
+
+    this.mainClass  = null;
+    this.classes    = [];
 
     this.duration       = duration[0];
     this.durationBase   = duration[0];
     this.countValues    = duration[1];
     this.durationValues = duration[2];
 
-    this.check  = document.getElementById(key + "-check");
-    this.hub    = document.getElementById(key + "-hub");
-    this.goal   = document.getElementById(key + "-goal");
-
+    this.getAllElements();
     this.getAllValues();
-    this.check.addEventListener("click", this.clickCheckBtn.bind(this));
+    this.mainClass.addEventListener("click", this.clickCheckBtn.bind(this));
+  }
+
+  getAllElements() {
+    for (let elementIndex = 0; elementIndex < this.elementCount; elementIndex++) {
+      this.classes[elementIndex] = this.getElement("#" + this.mainElement + "-" + this.elements[elementIndex]);
+    }
+    this.mainClass = this.classes[0];
+  }
+
+  /**
+   * @param {string} selector
+   * @return {Object}
+   */
+  getElement(selector) {
+    return document.querySelector(selector);
   }
 
   getAllValues() {
-    for (let i = 0; i < this.inputCount; i++) {
-      this.inputs[i] = document.getElementById(this.inputIds[i]);
-      this.inputs[i].addEventListener("input", this.getValue.bind(this, i));
+    for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
+      this.inputs[inputIndex] = document.getElementById(this.inputIds[inputIndex]);
+      this.inputs[inputIndex].addEventListener("input", this.getValue.bind(this, inputIndex));
     }
   }
 
   /**
-   * @param {number} index
+   * @param {number} inputIndex
    * @returns {string}
    */
-  getValue(index) {
-    return this.inputs[index].value;
+  getValue(inputIndex) {
+    return this.inputs[inputIndex].value;
   }
 
   clickCheckBtn() {
-    this.check.setAttribute("disabled", true);
+    this.mainClass.setAttribute("disabled", true);
 
-    for (let i = 0; i < this.inputCount; i++) {
-      this.inputs[i].setAttribute("disabled", true);
+    for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
+      this.inputs[inputIndex].setAttribute("disabled", true);
     }
     this.AddAllClasses();
   }
 
   AddAllClasses() {
-    for (let i = 0; i < this.inputCount; i++) {
-      if (this.inputs[i].value) {
-        this.addClass(i);
+    for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
+      if (this.inputs[inputIndex].value) {
+        this.addClass(inputIndex);
       }
-
-      if (this.durationValues) {
-        this.setDuration(i);
-      }
-
-      if (this.countValues) {
-        this.setCount(i);
-      }
+      this.setAllDurations(inputIndex);
     }
     window.setTimeout(this.removeAllClasses.bind(this), this.duration);
   }
 
   /**
-   * @param {number} index
+   * @param {number} inputIndex
    */
-  addClass(index) {
-    this.check.classList.add(this.inputs[index].value + "-check");
-    this.hub.classList.add(this.inputs[index].value + "-hub");
-    this.goal.classList.add(this.inputs[index].value + "-goal");
+  addClass(inputIndex) {
+    for (let elementIndex = 0; elementIndex < this.elementCount; elementIndex++) {
+      this.classes[elementIndex].classList.add(this.inputs[inputIndex].value + "-" + this.elements[elementIndex]);
+    }
   }
 
   /**
-   * @param {number} index
+   * @param {number} inputIndex
    */
-  setDuration(index) {
-    for (let [key, value] of Object.entries(this.durationValues)) {
-      if (this.inputs[index].value.includes(key)) {
-        this.duration = value;
+  setAllDurations(inputIndex) {
+    if (this.durationValues) {
+      this.setDuration(inputIndex);
+    }
+
+    if (this.countValues) {
+      this.setCount(inputIndex);
+    }
+  }
+
+  /**
+   * @param {number} inputIndex
+   */
+  setDuration(inputIndex) {
+    for (let [durationKey, durationValue] of Object.entries(this.durationValues)) {
+      if (this.inputs[inputIndex].value.includes(durationKey)) {
+        this.duration = durationValue;
       }
     }
   }
 
   /**
-   * @param {number} index
+   * @param {number} inputIndex
    */
-  setCount(index) {
-    for (let [key, value] of Object.entries(this.countValues)) {
-      if (this.inputs[index].value.includes(key)) {
-        this.duration = this.duration * value;
+  setCount(inputIndex) {
+    for (let [countKey, countValue] of Object.entries(this.countValues)) {
+      if (this.inputs[inputIndex].value.includes(countKey)) {
+        this.duration = this.duration * countValue;
       }
     }
   }
 
   removeAllClasses() {
-    this.check.checked  = false;
-    this.duration       = this.durationBase;
+    this.mainClass.checked  = false;
+    this.duration           = this.durationBase;
 
-    for (let i = 0; i < this.inputCount; i++) {
-      if (this.inputs[i].value) {
-        this.removeClass(i);
+    for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
+      if (this.inputs[inputIndex].value) {
+        this.removeClass(inputIndex);
       }
-      this.inputs[i].removeAttribute("disabled");
+      this.inputs[inputIndex].removeAttribute("disabled");
     }
-    this.check.removeAttribute("disabled");
+    this.mainClass.removeAttribute("disabled");
   }
 
   /**
-   * @param {number} index
+   * @param {number} inputIndex
    */
-  removeClass(index) {
-    this.check.classList.remove(this.inputs[index].value + "-check");
-    this.hub.classList.remove(this.inputs[index].value + "-hub");
-    this.goal.classList.remove(this.inputs[index].value + "-goal");
+  removeClass(inputIndex) {
+    for (let elementIndex = 0; elementIndex < this.elementCount; elementIndex++) {
+      this.classes[elementIndex].classList.remove(this.inputs[inputIndex].value + "-" + this.elements[elementIndex]);
+    }
   }
 }
