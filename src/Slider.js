@@ -31,7 +31,7 @@ class Slider extends Animadio {
   }
 
   randomSlide() {
-    var index;
+    let index;
 
     do {
       index = this.getRandomInteger(0, this.slides.length - 1);
@@ -44,11 +44,11 @@ class Slider extends Animadio {
   }
 
   autoSlide() {
-    var icon;
-    var toggle;
+    let icon;
+    let toggle;
 
-    icon    = document.querySelector("#slider-toggle i");
-    toggle  = document.querySelector("#slider-toggle");
+    icon    = this.getElement("#slider-toggle i");
+    toggle  = this.getElement("#slider-toggle");
 
     icon.classList.toggle("fa-play");
     icon.classList.toggle("fa-pause");
@@ -66,13 +66,13 @@ class Slider extends Animadio {
   }
 
   showToolbar() {
-    var icon;
-    var toggle;
-    var nav;
+    let icon;
+    let toggle;
+    let nav;
 
-    icon    = document.querySelector("#toolbar-toggle i");
-    toggle  = document.querySelector("#toolbar-toggle");
-    nav     = document.querySelector(".slider-nav ul");
+    icon    = this.getElement("#toolbar-toggle i");
+    toggle  = this.getElement("#toolbar-toggle");
+    nav     = this.getElement(".slider-nav ul");
 
     icon.classList.toggle("fa-toggle-on");
     icon.classList.toggle("fa-toggle-off");
@@ -87,11 +87,11 @@ class Slider extends Animadio {
   }
 
   refreshSlide() {
-    var sliderImage;
-    var sliderLegend;
+    let sliderImage;
+    let sliderLegend;
 
-    sliderImage  = document.querySelector("#slider img");
-    sliderLegend = document.querySelector("#slider figcaption");
+    sliderImage  = this.getElement("#slider img");
+    sliderLegend = this.getElement("#slider figcaption");
 
     sliderImage.src          = this.slides[this.state.index].image;
     sliderLegend.textContent = this.slides[this.state.index].legend;
