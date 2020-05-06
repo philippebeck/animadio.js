@@ -7,10 +7,11 @@
     "Animadio",
     "Classes",
     "Input",
-    "Events"
+    "Events",
+    "Slider"
   ],
   "license": "MIT",
-  "main": "animadio.js",
+  "main": "dist/animadio.js",
   "homepage": "https://animadio.org",
   "repository": {
     "type": "git",
