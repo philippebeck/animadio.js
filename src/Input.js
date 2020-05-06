@@ -1,12 +1,12 @@
-"use strict";
-
-class Animadio {
+class Input extends Animadio {
   /**
    * @param {Object} inputs
    * @param {Object} elements
    * @param {Object} duration
    */
   constructor(inputs, elements = ["animadio", ["trigger"]], duration = [2000, {}, {}]) {
+    super();
+
     this.inputIds   = inputs;
     this.inputCount = inputs.length;
     this.inputs     = [];
@@ -33,14 +33,6 @@ class Animadio {
       this.classes[elementIndex] = this.getElement("#" + this.mainElement + "-" + this.elements[elementIndex]);
     }
     this.mainClass = this.classes[0];
-  }
-
-  /**
-   * @param {string} selector
-   * @return {Object}
-   */
-  getElement(selector) {
-    return document.querySelector(selector);
   }
 
   getAllValues() {
