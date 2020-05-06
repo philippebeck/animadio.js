@@ -6,7 +6,7 @@
 
 ## Overview
 
-This is the Official Website about the CSS Framework Animadio !
+This is the JavaScript Package for the CSS Framework Animadio !
 
 ## Summary
 
