@@ -30,14 +30,14 @@ class Input extends Animadio {
 
   getAllElements() {
     for (let elementIndex = 0; elementIndex < this.elementCount; elementIndex++) {
-      this.classes[elementIndex] = this.getElement("#" + this.mainElement + "-" + this.elements[elementIndex]);
+      this.classes[elementIndex] = document.querySelector("#" + this.mainElement + "-" + this.elements[elementIndex]);
     }
     this.mainClass = this.classes[0];
   }
 
   getAllValues() {
     for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
-      this.inputs[inputIndex] = this.getElement("#" + this.inputIds[inputIndex]);
+      this.inputs[inputIndex] = document.querySelector("#" + this.inputIds[inputIndex]);
       this.inputs[inputIndex].addEventListener("input", this.getValue.bind(this, inputIndex));
     }
   }
