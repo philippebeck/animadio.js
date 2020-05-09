@@ -1,27 +1,65 @@
 class Slider extends Animadio {
-  constructor(slides) {
+  constructor() {
     super();
 
-    this.slides       = slides;
-    this.slidesCount  = slides.length;
+    this.index = 0;
 
-    this.index = -1;
-    this.timer = window.setInterval(this.nextSlide.bind(this), 5000);
+    this.slider   = document.getElementById("slider");
+    this.relay    = document.getElementById("slider-relay");
 
-    this.installEventListener("#slider-random", "click", this.randomSlide.bind(this));
-    this.installEventListener("#slider-previous", "click", this.previousSlide.bind(this));
-    this.installEventListener("#slider-next", "click", this.nextSlide.bind(this));
-    this.installEventListener("#slider-toggle", "click", this.autoSlide.bind(this));
-    this.installEventListener("#toolbar-toggle", "click", this.showToolbar.bind(this));
+    this.autoTrigger    = document.getElementById("slider-check-auto");
+    this.repeatTrigger  = document.getElementById("slider-check-repeat");
+    this.randomTrigger  = document.getElementById("slider-check-random");
+
+    this.auto   = document.getElementById("slider-auto");
+    this.repeat = document.getElementById("slider-repeat");
+    this.random = document.getElementById("slider-random");
+
+    this.previous = document.getElementById("slider-previous");
+    this.next     = document.getElementById("slider-next");
+
+    this.allTriggers    = this.slider.querySelectorAll("input");
+    this.slidesCount    = this.relay.querySelectorAll("figure").length;
+    this.slidesTriggers = [];
+
+    this.getTriggers();
+    this.setControls();
+
+    this.timer = window.setInterval(this.nextSlide.bind(this), 2000);
   }
 
-  nextSlide() {
-    this.index++;
-
-    if (this.index === this.slidesCount) {
-      this.index = 0;
+  getTriggers() {
+    let triggerCount = 0;
+    for (let triggerIndex = 0; triggerIndex < this.allTriggers.length; triggerIndex++) {
+      if (this.allTriggers[triggerIndex].getAttribute("type") === "radio") {
+        this.slidesTriggers[triggerCount] = this.allTriggers[triggerIndex];
+        triggerCount++;
+      }
     }
-    this.refreshSlide();
+  }
+
+  setControls() {
+    this.previous.addEventListener("click", this.previousSlide.bind(this));
+    this.repeat.addEventListener("click", this.repeatSlide.bind(this));
+    this.autoTrigger.addEventListener("click", this.autoSlide.bind(this));
+    this.random.addEventListener("click", this.randomSlide.bind(this));
+    this.next.addEventListener("click", this.nextSlide.bind(this));
+
+    document.addEventListener("keydown", this.keyboardControls.bind(this));
+  }
+
+  refreshSlide() {
+    let previousIndex = this.index - 1;
+
+    if (previousIndex < 0) {
+      previousIndex = this.slidesCount - 1;
+    }
+    if (previousIndex === this.slidesCount) {
+      previousIndex = 0;
+    }
+
+    this.slidesTriggers[this.index].setAttribute("checked", true);
+    this.slidesTriggers[previousIndex].removeAttribute("checked");
   }
 
   previousSlide() {
@@ -30,60 +68,68 @@ class Slider extends Animadio {
     if (this.index < 0) {
       this.index = this.slidesCount - 1;
     }
+
     this.refreshSlide();
   }
 
-  randomSlide() {
-    do {
-      let index = this.getRandomInteger(0, this.slidesCount - 1);
-    }
-    while (index === this.index);
-
-    this.index = index;
-
-    this.refreshSlide();
+  repeatSlide() {
+    this.repeatTrigger.toggleAttribute("checked");
   }
 
   autoSlide() {
-    let icon    = this.getElement("#slider-toggle i");
-    let toggle  = this.getElement("#slider-toggle");
-
-    icon.classList.toggle("fa-play");
-    icon.classList.toggle("fa-pause");
+    this.autoTrigger.toggleAttribute("checked");
 
     if (this.timer === null) {
-      this.timer    = window.setInterval(this.nextSlide.bind(this), 5000);
-      toggle.title  = "Pause";
+      this.timer        = window.setInterval(this.nextSlide.bind(this), 2000);
+      this.auto.title   = "Pause";
+
     } else {
       window.clearInterval(this.timer);
-
-      this.timer    = null;
-      toggle.title  = "Play";
+      this.timer        = null;
+      this.auto.title   = "Play";
     }
   }
 
-  showToolbar() {
-    let icon    = this.getElement("#toolbar-toggle i");
-    let toggle  = this.getElement("#toolbar-toggle");
-    let nav     = this.getElement(".slider-nav ul");
+  randomSlide() {
+    this.randomTrigger.toggleAttribute("checked");
 
-    icon.classList.toggle("fa-toggle-on");
-    icon.classList.toggle("fa-toggle-off");
-
-    nav.classList.toggle("none");
-
-    if (nav.classList.contains("none")) {
-      toggle.title = "Open the Slider Toolbar";
-    } else {
-      toggle.title = "Close the Slider Toolbar";
+    if (this.random.getAttribute("checked" === true)) {
+      this.index = this.getRandomInteger(0, this.slidesCount - 1);
     }
+
+    this.refreshSlide();
   }
 
-  refreshSlide() {
-    let sliderImage  = this.getElement("#slider img");
-    let sliderLegend = this.getElement("#slider figcaption");
+  nextSlide() {
+    this.index++;
 
-    sliderImage.src          = this.slides[this.index].image;
-    sliderLegend.textContent = this.slides[this.index].legend;
+    if (this.index >= this.slidesCount) {
+      this.index = 0;
+    }
+
+    this.refreshSlide();
+  }
+
+  /**
+   * @param {Object} event
+   */
+  keyboardControls(event) {
+    switch (event.code) {
+      case "ArrowLeft":
+        this.previousSlide();
+        break;
+      case "ArrowUp":
+        this.repeatSlide();
+        break;
+      case "Space":
+        this.autoSlide();
+        break;
+      case "ArrowDown":
+        this.randomSlide();
+        break;
+      case "ArrowRight":
+        this.nextSlide();
+        break;
+    }
   }
 }
