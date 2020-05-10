@@ -146,7 +146,11 @@ class Slider {
    * @param {Boolean} auto
    * @param {Boolean} random
    */
-  constructor(timeout = 2000, auto = true, random = false) {
+  constructor(
+      timeout = 2000,
+      auto = true,
+      random = false
+  ) {
     this.slider         = document.getElementById("slider");
     this.slidesTriggers = this.slider.querySelectorAll("input");
     this.slidesCount    = this.slidesTriggers.length;
@@ -171,25 +175,45 @@ class Slider {
   }
 
   setControls() {
-    this.previous.addEventListener("click", this.goPrevious.bind(this));
-    this.next.addEventListener("click", this.goNext.bind(this));
-    this.auto.addEventListener("click", this.setAuto.bind(this));
-    this.random.addEventListener("click", this.setRandom.bind(this));
+    this.previous.addEventListener(
+        "click",
+        this.goPrevious.bind(this)
+    );
+    this.next.addEventListener(
+        "click",
+        this.goNext.bind(this)
+    );
 
-    document.addEventListener("keydown", this.setKeyboard.bind(this));
+    this.auto.addEventListener(
+        "click",
+        this.checkAuto.bind(this)
+    );
+    this.random.addEventListener(
+        "click",
+        this.checkRandom.bind(this)
+    );
+
+    document.addEventListener(
+        "keydown",
+        this.setKeyboard.bind(this)
+    );
   }
 
   runSlider() {
     if (this.autoState) {
-      this.timer = window.setInterval(this.goNext.bind(this), this.timeout);
+      this.timer = window.setInterval(
+          this.goNext.bind(this),
+          this.timeout
+      );
+
     } else {
       this.goNext();
     }
   }
 
   /**
-   * @param min
-   * @param max
+   * @param {number} min
+   * @param {number} max
    * @return
    */
   getRandomInteger(min, max) {
@@ -197,17 +221,24 @@ class Slider {
   }
 
   refreshSlide() {
-    for (let slidesIndex = 0; slidesIndex < this.slidesCount; slidesIndex++) {
-      if (this.slidesTriggers[slidesIndex].hasAttribute("checked")) {
-        this.slidesTriggers[slidesIndex].removeAttribute("checked");
+    for (let i = 0; i < this.slidesCount; i++) {
+
+      if (this.slidesTriggers[i].hasAttribute("checked")) {
+        this.slidesTriggers[i].removeAttribute("checked");
       }
     }
-    this.slidesTriggers[this.index].setAttribute("checked", true);
+    this.slidesTriggers[this.index].setAttribute(
+        "checked",
+        true
+    );
   }
 
   goPrevious() {
     if (this.randomState) {
-      this.index = this.getRandomInteger(0, this.slidesCount - 1);
+      this.index = this.getRandomInteger(
+          0,
+          this.slidesCount - 1
+      );
 
     } else {
       this.index--;
@@ -221,7 +252,10 @@ class Slider {
 
   goNext() {
     if (this.randomState) {
-      this.index = this.getRandomInteger(0, this.slidesCount - 1);
+      this.index = this.getRandomInteger(
+          0,
+          this.slidesCount - 1
+      );
 
     } else {
       this.index++;
@@ -233,40 +267,76 @@ class Slider {
     this.refreshSlide();
   }
 
-  setAuto() {
+  checkAuto() {
     if (this.autoState) {
-      this.autoState  = false;
-      this.auto.title = "Play";
-      this.autoIcon.classList.add("fa-play");
-      this.autoIcon.classList.remove("fa-pause");
+      this.setAuto(
+          false,
+          "Play",
+          "fa-play",
+          "fa-pause"
+      );
       window.clearInterval(this.timer);
 
-    } else if (!this.autoState) {
-      this.autoState  = true;
-      this.auto.title = "Pause";
-      this.autoIcon.classList.add("fa-pause");
-      this.autoIcon.classList.remove("fa-play");
-      this.timer = window.setInterval(this.goNext.bind(this), this.timeout);
+    } else {
+      this.setAuto(
+          true,
+          "Pause",
+          "fa-pause",
+          "fa-play"
+      );
+      this.timer = window.setInterval(
+          this.goNext.bind(this),
+          this.timeout
+      );
     }
-
     this.refreshSlide();
   }
 
-  setRandom() {
-    if (this.randomState) {
-      this.randomState  = false;
-      this.random.title = "Random";
-      this.randomIcon.classList.add("fa-random");
-      this.randomIcon.classList.remove("fa-long-arrow-alt-right");
+  /**
+   * @param {boolean} state
+   * @param {string} title
+   * @param {string} add
+   * @param {string} remove
+   */
+  setAuto(state, title, add, remove) {
+    this.autoState  = state;
+    this.auto.title = title;
 
-    } else if (!this.randomState) {
-      this.randomState  = true;
-      this.random.title = "Normal";
-      this.randomIcon.classList.add("fa-long-arrow-alt-right");
-      this.randomIcon.classList.remove("fa-random");
+    this.autoIcon.classList.add(add);
+    this.autoIcon.classList.remove(remove);
+  }
+
+  checkRandom() {
+    if (this.randomState) {
+      this.setRandom(
+          false,
+          "Random",
+          "fa-random",
+          "fa-long-arrow-alt-right"
+      )
+    } else {
+      this.setRandom(
+          true,
+          "Normal",
+          "fa-long-arrow-alt-right",
+          "fa-random"
+      );
     }
-    
     this.refreshSlide();
+  }
+
+  /**
+   * @param {boolean} state
+   * @param {string} title
+   * @param {string} add
+   * @param {string} remove
+   */
+  setRandom(state, title, add, remove) {
+    this.randomState  = state;
+    this.random.title = title;
+
+    this.randomIcon.classList.add(add);
+    this.randomIcon.classList.remove(remove);
   }
 
   /**
@@ -277,12 +347,15 @@ class Slider {
       case "ArrowLeft":
         this.goPrevious();
         break;
+
       case "ArrowUp":
-        this.setAuto();
+        this.checkAuto();
         break;
+
       case "ArrowDown":
-        this.setRandom();
+        this.checkRandom();
         break;
+
       case "ArrowRight":
         this.goNext();
         break;
@@ -291,4 +364,4 @@ class Slider {
 }
 
 /*! Author: Philippe Beck <philippe@philippebeck.net>
- Updated: 10th May 2020 @ 3:11:23 PM */
+ Updated: 10th May 2020 @ 4:06:32 PM */
