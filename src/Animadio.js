@@ -1,12 +1,12 @@
 "use strict";
 
 class Animadio {
-  /**
-   * @param min
-   * @param max
-   * @return
-   */
-  getRandomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+
+  static input (inputs, elements = ["animadio", ["trigger"]], duration = [2000, {}, {}]) {
+    new Input(inputs, elements, duration);
+  }
+
+  static slider (timeout = 2000, auto = true, random = false) {
+    new Slider(timeout, auto, random);
   }
 }

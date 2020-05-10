@@ -1,12 +1,10 @@
-class Input extends Animadio {
+class Input {
   /**
    * @param {Object} inputs
    * @param {Object} elements
    * @param {Object} duration
    */
   constructor(inputs, elements = ["animadio", ["trigger"]], duration = [2000, {}, {}]) {
-    super();
-
     this.inputIds   = inputs;
     this.inputCount = inputs.length;
     this.inputs     = [];

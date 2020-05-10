@@ -1,12 +1,10 @@
-class Slider extends Animadio {
+class Slider {
   /**
    * @param {number} timeout
    * @param {Boolean} auto
    * @param {Boolean} random
    */
-  constructor(timeout = 1000, auto = true, random = false) {
-    super();
-
+  constructor(timeout = 2000, auto = true, random = false) {
     this.slider         = document.getElementById("slider");
     this.slidesTriggers = this.slider.querySelectorAll("input");
     this.slidesCount    = this.slidesTriggers.length;
@@ -45,6 +43,15 @@ class Slider extends Animadio {
     } else {
       this.goNext();
     }
+  }
+
+  /**
+   * @param min
+   * @param max
+   * @return
+   */
+  getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   refreshSlide() {
