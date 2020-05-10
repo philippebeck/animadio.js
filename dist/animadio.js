@@ -1,4 +1,4 @@
-/*! animadio.js v0.1.8 | https://animadio.org | MIT License */
+/*! animadio.js v0.1.10 | https://animadio.org | MIT License */
 
 "use strict";
 
@@ -146,11 +146,7 @@ class Slider {
    * @param {Boolean} auto
    * @param {Boolean} random
    */
-  constructor(
-      timeout = 2000,
-      auto = true,
-      random = false
-  ) {
+  constructor(timeout = 2000, auto = true, random = false) {
     this.slider         = document.getElementById("slider");
     this.slidesTriggers = this.slider.querySelectorAll("input");
     this.slidesCount    = this.slidesTriggers.length;
@@ -175,28 +171,13 @@ class Slider {
   }
 
   setControls() {
-    this.previous.addEventListener(
-        "click",
-        this.goPrevious.bind(this)
-    );
-    this.next.addEventListener(
-        "click",
-        this.goNext.bind(this)
-    );
+    this.previous.addEventListener("click", this.goPrevious.bind(this));
+    this.next.addEventListener("click", this.goNext.bind(this));
 
-    this.auto.addEventListener(
-        "click",
-        this.checkAuto.bind(this)
-    );
-    this.random.addEventListener(
-        "click",
-        this.checkRandom.bind(this)
-    );
+    this.auto.addEventListener("click", this.checkAuto.bind(this));
+    this.random.addEventListener("click", this.checkRandom.bind(this));
 
-    document.addEventListener(
-        "keydown",
-        this.setKeyboard.bind(this)
-    );
+    document.addEventListener("keydown", this.setKeyboard.bind(this));
   }
 
   runSlider() {
@@ -227,18 +208,13 @@ class Slider {
         this.slidesTriggers[i].removeAttribute("checked");
       }
     }
-    this.slidesTriggers[this.index].setAttribute(
-        "checked",
-        true
-    );
+
+    this.slidesTriggers[this.index].setAttribute("checked", true);
   }
 
   goPrevious() {
     if (this.randomState) {
-      this.index = this.getRandomInteger(
-          0,
-          this.slidesCount - 1
-      );
+      this.index = this.getRandomInteger(0, this.slidesCount - 1);
 
     } else {
       this.index--;
@@ -247,15 +223,13 @@ class Slider {
         this.index = this.slidesCount - 1;
       }
     }
+
     this.refreshSlide();
   }
 
   goNext() {
     if (this.randomState) {
-      this.index = this.getRandomInteger(
-          0,
-          this.slidesCount - 1
-      );
+      this.index = this.getRandomInteger(0, this.slidesCount - 1);
 
     } else {
       this.index++;
@@ -264,31 +238,20 @@ class Slider {
         this.index = 0;
       }
     }
+
     this.refreshSlide();
   }
 
   checkAuto() {
     if (this.autoState) {
-      this.setAuto(
-          false,
-          "Play",
-          "fa-play",
-          "fa-pause"
-      );
+      this.setAuto(false, "Play", "fa-play", "fa-pause");
       window.clearInterval(this.timer);
 
     } else {
-      this.setAuto(
-          true,
-          "Pause",
-          "fa-pause",
-          "fa-play"
-      );
-      this.timer = window.setInterval(
-          this.goNext.bind(this),
-          this.timeout
-      );
+      this.setAuto(true, "Pause", "fa-pause", "fa-play");
+      this.timer = window.setInterval(this.goNext.bind(this), this.timeout);
     }
+
     this.refreshSlide();
   }
 
@@ -302,26 +265,17 @@ class Slider {
     this.autoState  = state;
     this.auto.title = title;
 
-    this.autoIcon.classList.add(add);
-    this.autoIcon.classList.remove(remove);
+    this.setIcon(this.autoIcon, add, remove);
   }
 
   checkRandom() {
     if (this.randomState) {
-      this.setRandom(
-          false,
-          "Random",
-          "fa-random",
-          "fa-long-arrow-alt-right"
-      )
+      this.setRandom(false, "Random", "fa-random", "fa-long-arrow-alt-right")
+
     } else {
-      this.setRandom(
-          true,
-          "Normal",
-          "fa-long-arrow-alt-right",
-          "fa-random"
-      );
+      this.setRandom(true, "Normal", "fa-long-arrow-alt-right", "fa-random");
     }
+
     this.refreshSlide();
   }
 
@@ -335,8 +289,17 @@ class Slider {
     this.randomState  = state;
     this.random.title = title;
 
-    this.randomIcon.classList.add(add);
-    this.randomIcon.classList.remove(remove);
+    this.setIcon(this.randomIcon, add, remove);
+  }
+
+  /**
+   * @param {object} icon
+   * @param {string} add
+   * @param {string} remove
+   */
+  setIcon(icon, add, remove) {
+    icon.classList.add(add);
+    icon.classList.remove(remove);
   }
 
   /**
@@ -344,6 +307,7 @@ class Slider {
    */
   setKeyboard(event) {
     switch (event.code) {
+
       case "ArrowLeft":
         this.goPrevious();
         break;
@@ -364,4 +328,4 @@ class Slider {
 }
 
 /*! Author: Philippe Beck <philippe@philippebeck.net>
- Updated: 10th May 2020 @ 4:06:32 PM */
+ Updated: 10th May 2020 @ 4:45:29 PM */
