@@ -1,27 +1,25 @@
-/*! animadio.js v0.1.6 | https://animadio.org | MIT License */
+/*! animadio.js v0.1.8 | https://animadio.org | MIT License */
 
 "use strict";
 
 class Animadio {
-  /**
-   * @param min
-   * @param max
-   * @return
-   */
-  getRandomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+
+  static input (inputs, elements = ["animadio", ["trigger"]], duration = [2000, {}, {}]) {
+    new Input(inputs, elements, duration);
+  }
+
+  static slider (timeout = 2000, auto = true, random = false) {
+    new Slider(timeout, auto, random);
   }
 }
 
-class Input extends Animadio {
+class Input {
   /**
    * @param {Object} inputs
    * @param {Object} elements
    * @param {Object} duration
    */
   constructor(inputs, elements = ["animadio", ["trigger"]], duration = [2000, {}, {}]) {
-    super();
-
     this.inputIds   = inputs;
     this.inputCount = inputs.length;
     this.inputs     = [];
@@ -142,15 +140,13 @@ class Input extends Animadio {
   }
 }
 
-class Slider extends Animadio {
+class Slider {
   /**
    * @param {number} timeout
    * @param {Boolean} auto
    * @param {Boolean} random
    */
-  constructor(timeout = 1000, auto = true, random = false) {
-    super();
-
+  constructor(timeout = 2000, auto = true, random = false) {
     this.slider         = document.getElementById("slider");
     this.slidesTriggers = this.slider.querySelectorAll("input");
     this.slidesCount    = this.slidesTriggers.length;
@@ -189,6 +185,15 @@ class Slider extends Animadio {
     } else {
       this.goNext();
     }
+  }
+
+  /**
+   * @param min
+   * @param max
+   * @return
+   */
+  getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   refreshSlide() {
@@ -286,4 +291,4 @@ class Slider extends Animadio {
 }
 
 /*! Author: Philippe Beck <philippe@philippebeck.net>
- Updated: 10th May 2020 @ 2:10:51 PM */
+ Updated: 10th May 2020 @ 3:11:23 PM */
