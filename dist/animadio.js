@@ -1,4 +1,4 @@
-/*! animadio.js v0.1.5 | https://animadio.org | MIT License */
+/*! animadio.js v0.1.6 | https://animadio.org | MIT License */
 
 "use strict";
 
@@ -143,140 +143,147 @@ class Input extends Animadio {
 }
 
 class Slider extends Animadio {
-  constructor() {
+  /**
+   * @param {number} timeout
+   * @param {Boolean} auto
+   * @param {Boolean} random
+   */
+  constructor(timeout = 1000, auto = true, random = false) {
     super();
 
-    this.index = 0;
-
-    this.slider   = document.getElementById("slider");
-    this.relay    = document.getElementById("slider-relay");
-
-    this.autoTrigger    = document.getElementById("slider-check-auto");
-    this.repeatTrigger  = document.getElementById("slider-check-repeat");
-    this.randomTrigger  = document.getElementById("slider-check-random");
-
-    this.auto   = document.getElementById("slider-auto");
-    this.repeat = document.getElementById("slider-repeat");
-    this.random = document.getElementById("slider-random");
+    this.slider         = document.getElementById("slider");
+    this.slidesTriggers = this.slider.querySelectorAll("input");
+    this.slidesCount    = this.slidesTriggers.length;
 
     this.previous = document.getElementById("slider-previous");
     this.next     = document.getElementById("slider-next");
 
-    this.allTriggers    = this.slider.querySelectorAll("input");
-    this.slidesCount    = this.relay.querySelectorAll("figure").length;
-    this.slidesTriggers = [];
+    this.index    = -1;
+    this.timer    = null;
+    this.timeout  = timeout;
 
-    this.getTriggers();
+    this.auto       = document.getElementById("slider-auto");
+    this.autoIcon   = this.auto.querySelector("i");
+    this.autoState  = auto;
+
+    this.random       = document.getElementById("slider-random");
+    this.randomIcon   = this.random.querySelector("i");
+    this.randomState  = random;
+
     this.setControls();
-
-    this.timer = window.setInterval(this.nextSlide.bind(this), 2000);
-  }
-
-  getTriggers() {
-    let triggerCount = 0;
-    for (let triggerIndex = 0; triggerIndex < this.allTriggers.length; triggerIndex++) {
-      if (this.allTriggers[triggerIndex].getAttribute("type") === "radio") {
-        this.slidesTriggers[triggerCount] = this.allTriggers[triggerIndex];
-        triggerCount++;
-      }
-    }
+    this.runSlider();
   }
 
   setControls() {
-    this.previous.addEventListener("click", this.previousSlide.bind(this));
-    this.repeat.addEventListener("click", this.repeatSlide.bind(this));
-    this.autoTrigger.addEventListener("click", this.autoSlide.bind(this));
-    this.random.addEventListener("click", this.randomSlide.bind(this));
-    this.next.addEventListener("click", this.nextSlide.bind(this));
+    this.previous.addEventListener("click", this.goPrevious.bind(this));
+    this.next.addEventListener("click", this.goNext.bind(this));
+    this.auto.addEventListener("click", this.setAuto.bind(this));
+    this.random.addEventListener("click", this.setRandom.bind(this));
 
-    document.addEventListener("keydown", this.keyboardControls.bind(this));
+    document.addEventListener("keydown", this.setKeyboard.bind(this));
+  }
+
+  runSlider() {
+    if (this.autoState) {
+      this.timer = window.setInterval(this.goNext.bind(this), this.timeout);
+    } else {
+      this.goNext();
+    }
   }
 
   refreshSlide() {
-    let previousIndex = this.index - 1;
-
-    if (previousIndex < 0) {
-      previousIndex = this.slidesCount - 1;
+    for (let slidesIndex = 0; slidesIndex < this.slidesCount; slidesIndex++) {
+      if (this.slidesTriggers[slidesIndex].hasAttribute("checked")) {
+        this.slidesTriggers[slidesIndex].removeAttribute("checked");
+      }
     }
-    if (previousIndex === this.slidesCount) {
-      previousIndex = 0;
-    }
-
     this.slidesTriggers[this.index].setAttribute("checked", true);
-    this.slidesTriggers[previousIndex].removeAttribute("checked");
   }
 
-  previousSlide() {
-    this.index--;
-
-    if (this.index < 0) {
-      this.index = this.slidesCount - 1;
-    }
-
-    this.refreshSlide();
-  }
-
-  repeatSlide() {
-    this.repeatTrigger.toggleAttribute("checked");
-  }
-
-  autoSlide() {
-    this.autoTrigger.toggleAttribute("checked");
-
-    if (this.timer === null) {
-      this.timer        = window.setInterval(this.nextSlide.bind(this), 2000);
-      this.auto.title   = "Pause";
+  goPrevious() {
+    if (this.randomState) {
+      this.index = this.getRandomInteger(0, this.slidesCount - 1);
 
     } else {
-      window.clearInterval(this.timer);
-      this.timer        = null;
-      this.auto.title   = "Play";
+      this.index--;
+
+      if (this.index < 0) {
+        this.index = this.slidesCount - 1;
+      }
     }
+    this.refreshSlide();
   }
 
-  randomSlide() {
-    this.randomTrigger.toggleAttribute("checked");
-
-    if (this.random.getAttribute("checked" === true)) {
+  goNext() {
+    if (this.randomState) {
       this.index = this.getRandomInteger(0, this.slidesCount - 1);
+
+    } else {
+      this.index++;
+
+      if (this.index >= this.slidesCount) {
+        this.index = 0;
+      }
+    }
+    this.refreshSlide();
+  }
+
+  setAuto() {
+    if (this.autoState) {
+      this.autoState  = false;
+      this.auto.title = "Play";
+      this.autoIcon.classList.add("fa-play");
+      this.autoIcon.classList.remove("fa-pause");
+      window.clearInterval(this.timer);
+
+    } else if (!this.autoState) {
+      this.autoState  = true;
+      this.auto.title = "Pause";
+      this.autoIcon.classList.add("fa-pause");
+      this.autoIcon.classList.remove("fa-play");
+      this.timer = window.setInterval(this.goNext.bind(this), this.timeout);
     }
 
     this.refreshSlide();
   }
 
-  nextSlide() {
-    this.index++;
+  setRandom() {
+    if (this.randomState) {
+      this.randomState  = false;
+      this.random.title = "Random";
+      this.randomIcon.classList.add("fa-random");
+      this.randomIcon.classList.remove("fa-long-arrow-alt-right");
 
-    if (this.index >= this.slidesCount) {
-      this.index = 0;
+    } else if (!this.randomState) {
+      this.randomState  = true;
+      this.random.title = "Normal";
+      this.randomIcon.classList.add("fa-long-arrow-alt-right");
+      this.randomIcon.classList.remove("fa-random");
     }
-
+    
     this.refreshSlide();
   }
 
   /**
    * @param {Object} event
    */
-  keyboardControls(event) {
+  setKeyboard(event) {
     switch (event.code) {
       case "ArrowLeft":
-        this.previousSlide();
+        this.goPrevious();
         break;
       case "ArrowUp":
-        this.repeatSlide();
-        break;
-      case "Space":
-        this.autoSlide();
+        this.setAuto();
         break;
       case "ArrowDown":
-        this.randomSlide();
+        this.setRandom();
         break;
       case "ArrowRight":
-        this.nextSlide();
+        this.goNext();
         break;
     }
   }
 }
 
 /*! Author: Philippe Beck <philippe@philippebeck.net>
- Updated: 9th May 2020 @ 10:32:19 PM */
+ Updated: 10th May 2020 @ 2:10:51 PM */
