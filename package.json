@@ -1,6 +1,6 @@
 {
   "name": "animadio.js",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Animadio JavaScript Tool who create Classes with Input Events",
   "keywords": [
     "JavaScript",
@@ -8,7 +8,8 @@
     "Classes",
     "Input",
     "Events",
-    "Slider"
+    "Slider",
+    "Canvas"
   ],
   "license": "MIT",
   "main": "dist/animadio.js",
