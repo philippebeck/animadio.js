@@ -1,4 +1,4 @@
-/*! animadio.js v0.1.11 | https://animadio.org | MIT License */
+/*! animadio.js v0.1.12 | https://animadio.org | MIT License */
 
 "use strict";
 
@@ -347,13 +347,22 @@ class Canvas {
     this.touchX = 0;
     this.touchY = 0;
 
+    this.lineMaker  = null;
+    this.colorMaker = null;
+
+    this.line   = line;
+    this.color  = color;
+
     this.canvas   = document.getElementById("canvas");
     this.context  = this.canvas.getContext("2d");
-    this.cleaner  = document.getElementById("canvas-cleaner");
+    
+    this.cleaner = document.getElementById("canvas-cleaner");
+    this.cleaner.addEventListener("click", this.cleanCanvas.bind(this));
 
     this.initCanvas(width, height);
-    this.initContext(line, color);
-    this.initEvents();
+    this.initOptions();
+    this.initContext(this.line, this.color);
+    this.initDraw();
   }
 
   /**
@@ -363,6 +372,18 @@ class Canvas {
   initCanvas(width, height) {
     this.canvas.width   = width;
     this.canvas.height  = height;
+  }
+
+  initOptions() {
+    if (document.getElementById("canvas-line")) {
+      this.lineMaker = document.getElementById("canvas-line");
+      this.lineMaker.addEventListener("input", this.setLine.bind(this));
+    }
+
+    if (document.getElementById("canvas-color")) {
+      this.colorMaker = document.getElementById("canvas-color");
+      this.colorMaker.addEventListener("input", this.setColor.bind(this));
+    }
   }
 
   /**
@@ -376,7 +397,7 @@ class Canvas {
     this.context.lineJoin     = "round";
   }
 
-  initEvents() {
+  initDraw() {
     this.canvas.addEventListener("mousedown", this.moveWithMouse.bind(this));
     this.canvas.addEventListener("mousemove", this.drawWithMouse.bind(this));
     this.canvas.addEventListener("mouseup", this.stopDrawing.bind(this));
@@ -386,8 +407,16 @@ class Canvas {
     this.canvas.addEventListener("touchmove", this.drawWithTouch.bind(this));
     this.canvas.addEventListener("touchend", this.stopDrawing.bind(this));
     this.canvas.addEventListener("touchcancel", this.stopDrawing.bind(this));
+  }
 
-    this.cleaner.addEventListener("click", this.cleanCanvas.bind(this));
+  setLine() {
+    this.line = this.lineMaker.value;
+    this.initContext(this.line, this.color);
+  }
+
+  setColor() {
+    this.color = this.colorMaker.value;
+    this.initContext(this.line, this.color);
   }
 
   startDrawing() {
@@ -466,4 +495,4 @@ class Canvas {
 }
 
 /*! Author: Philippe Beck <philippe@philippebeck.net>
- Updated: 11th May 2020 @ 9:05:13 PM */
+ Updated: 12th May 2020 @ 9:06:21 AM */
