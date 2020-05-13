@@ -40,18 +40,26 @@ class Canvas {
 
   initOptions() {
     if (document.getElementById("canvas-line")) {
-      this.line = document.getElementById("canvas-line");
-      this.line.addEventListener("input", this.setLine.bind(this));
+      this.initLine();
     }
 
     if (document.getElementById("canvas-color")) {
-      this.color = document.getElementById("canvas-color");
-      this.color.addEventListener("input", this.setColor.bind(this));
+      this.initColor();
     }
+  }
+
+  initLine() {
+    this.line = document.getElementById("canvas-line");
+    this.line.addEventListener("input", this.setLine.bind(this));
   }
 
   setLine() {
     this.context.lineWidth = this.line.value;
+  }
+
+  initColor() {
+    this.color = document.getElementById("canvas-color");
+    this.color.addEventListener("input", this.setColor.bind(this));
   }
 
   setColor() {
