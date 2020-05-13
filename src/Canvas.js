@@ -40,26 +40,18 @@ class Canvas {
 
   initOptions() {
     if (document.getElementById("canvas-line")) {
-      this.initLine();
+      this.line = document.getElementById("canvas-line");
+      this.line.addEventListener("input", this.setLine.bind(this));
     }
 
     if (document.getElementById("canvas-color")) {
-      this.initColor();
+      this.color = document.getElementById("canvas-color");
+      this.color.addEventListener("input", this.setColor.bind(this));
     }
-  }
-
-  initLine() {
-    this.line = document.getElementById("canvas-line");
-    this.line.addEventListener("input", this.setLine.bind(this));
   }
 
   setLine() {
     this.context.lineWidth = this.line.value;
-  }
-
-  initColor() {
-    this.color = document.getElementById("canvas-color");
-    this.color.addEventListener("input", this.setColor.bind(this));
   }
 
   setColor() {
@@ -78,12 +70,12 @@ class Canvas {
   }
 
   initDraw() {
-    this.canvas.addEventListener("mousedown", this.moveInCanvas.bind(this, "mousedown"));
+    this.canvas.addEventListener("mousedown", this.moveInCanvas.bind(this, "mouse"));
     this.canvas.addEventListener("mousemove", this.drawWithMouse.bind(this));
     this.canvas.addEventListener("mouseup", this.stopDrawing.bind(this));
     this.canvas.addEventListener("mouseout", this.stopDrawing.bind(this));
 
-    this.canvas.addEventListener("touchstart", this.moveInCanvas.bind(this, "touchstart"));
+    this.canvas.addEventListener("touchstart", this.moveInCanvas.bind(this, "touch"));
     this.canvas.addEventListener("touchmove", this.drawWithTouch.bind(this));
     this.canvas.addEventListener("touchend", this.stopDrawing.bind(this));
     this.canvas.addEventListener("touchcancel", this.stopDrawing.bind(this));
@@ -129,29 +121,15 @@ class Canvas {
     this.startDrawing();
 
     switch (type) {
-      case "mousedown":
-        this.moveWithMouse(event);
+      case "mouse":
+        this.getMouseLocation(event);
+        this.moveTo(event, this.mouseX, this.mouseY);
         break;
-      case "touchstart":
-        this.moveWithTouch(event);
+      case "touch":
+        this.getTouchLocation(event);
+        this.moveTo(event, this.touchX, this.touchY);
         break;
     }
-  }
-
-  /**
-   * @param {object} event
-   */
-  moveWithMouse(event) {
-    this.getMouseLocation(event);
-    this.moveTo(event, this.mouseX, this.mouseY);
-  }
-
-  /**
-   * @param {object} event
-   */
-  moveWithTouch(event) {
-    this.getTouchLocation(event);
-    this.moveTo(event, this.touchX, this.touchY);
   }
 
   /**
