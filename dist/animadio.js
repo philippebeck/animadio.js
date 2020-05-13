@@ -1,4 +1,4 @@
-/*! animadio.js v0.1.14 | https://animadio.org | MIT License */
+/*! animadio.js v0.1.15 | https://animadio.org | MIT License */
 
 "use strict";
 
@@ -373,18 +373,26 @@ class Canvas {
 
   initOptions() {
     if (document.getElementById("canvas-line")) {
-      this.line = document.getElementById("canvas-line");
-      this.line.addEventListener("input", this.setLine.bind(this));
+      this.initLine();
     }
 
     if (document.getElementById("canvas-color")) {
-      this.color = document.getElementById("canvas-color");
-      this.color.addEventListener("input", this.setColor.bind(this));
+      this.initColor();
     }
+  }
+
+  initLine() {
+    this.line = document.getElementById("canvas-line");
+    this.line.addEventListener("input", this.setLine.bind(this));
   }
 
   setLine() {
     this.context.lineWidth = this.line.value;
+  }
+
+  initColor() {
+    this.color = document.getElementById("canvas-color");
+    this.color.addEventListener("input", this.setColor.bind(this));
   }
 
   setColor() {
@@ -520,4 +528,4 @@ class Canvas {
 }
 
 /*! Author: Philippe Beck <philippe@philippebeck.net>
- Updated: 13th May 2020 @ 2:20:48 PM */
+ Updated: 13th May 2020 @ 3:07:57 PM */
