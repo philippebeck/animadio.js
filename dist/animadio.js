@@ -1,4 +1,4 @@
-/*! animadio.js v0.1.16 | https://animadio.org | MIT License */
+/*! animadio.js v0.1.17 | https://animadio.org | MIT License */
 
 "use strict";
 
@@ -404,12 +404,12 @@ class Canvas {
 
   initDraw() {
     this.canvas.addEventListener("mousedown", this.moveInCanvas.bind(this, "mouse"));
-    this.canvas.addEventListener("mousemove", this.drawWithMouse.bind(this));
+    this.canvas.addEventListener("mousemove", this.drawInCanvas.bind(this, "mouse"));
     this.canvas.addEventListener("mouseup", this.stopDrawing.bind(this));
     this.canvas.addEventListener("mouseout", this.stopDrawing.bind(this));
 
     this.canvas.addEventListener("touchstart", this.moveInCanvas.bind(this, "touch"));
-    this.canvas.addEventListener("touchmove", this.drawWithTouch.bind(this));
+    this.canvas.addEventListener("touchmove", this.drawInCanvas.bind(this, "touch"));
     this.canvas.addEventListener("touchend", this.stopDrawing.bind(this));
     this.canvas.addEventListener("touchcancel", this.stopDrawing.bind(this));
   }
@@ -447,10 +447,10 @@ class Canvas {
   }
 
   /**
-   * @param {object} event
    * @param {string} type
+   * @param {object} event
    */
-  moveInCanvas(event, type) {
+  moveInCanvas(type, event) {
     this.startDrawing();
 
     switch (type) {
@@ -476,22 +476,22 @@ class Canvas {
   }
 
   /**
+   * @param {string} type
    * @param {object} event
    */
-  drawWithMouse(event) {
+  drawInCanvas(type, event) {
     if (this.startState) {
-      this.getMouseLocation(event);
-      this.lineTo(this.mouseX, this.mouseY);
-    }
-  }
 
-  /**
-   * @param {object} event
-   */
-  drawWithTouch(event) {
-    if (this.startState) {
-      this.getTouchLocation(event);
-      this.lineTo(this.touchX, this.touchY);
+      switch (type) {
+        case "mouse":
+          this.getMouseLocation(event);
+          this.lineTo(this.mouseX, this.mouseY);
+          break;
+        case "touch":
+          this.getTouchLocation(event);
+          this.lineTo(this.touchX, this.touchY);
+          break;
+      }
     }
   }
 
@@ -506,4 +506,4 @@ class Canvas {
 }
 
 /*! Author: Philippe Beck <philippe@philippebeck.net>
- Updated: 13th May 2020 @ 3:53:53 PM */
+ Updated: 13th May 2020 @ 6:22:11 PM */
