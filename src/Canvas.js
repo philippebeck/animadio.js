@@ -123,11 +123,9 @@ class Canvas {
     switch (type) {
       case "mousedown":
         this.moveWithMouse(event);
-        event.preventDefault();
         break;
       case "touchstart":
         this.moveWithTouch(event);
-        event.preventDefault();
         break;
     }
   }
@@ -137,7 +135,7 @@ class Canvas {
    */
   moveWithMouse(event) {
     this.getMouseLocation(event);
-    this.context.moveTo(this.mouseX, this.mouseY);
+    this.moveTo(event, this.mouseX, this.mouseY);
   }
 
   /**
@@ -145,7 +143,17 @@ class Canvas {
    */
   moveWithTouch(event) {
     this.getTouchLocation(event);
-    this.context.moveTo(this.touchX, this.touchY);
+    this.moveTo(event, this.touchX, this.touchY);
+  }
+
+  /**
+   * @param {object} event
+   * @param {number} x
+   * @param {number} y
+   */
+  moveTo(event, x, y) {
+    this.context.moveTo(x, y);
+    event.preventDefault();
   }
 
   /**
@@ -154,8 +162,7 @@ class Canvas {
   drawWithMouse(event) {
     if (this.startState) {
       this.getMouseLocation(event);
-      this.context.lineTo(this.mouseX, this.mouseY);
-      this.context.stroke();
+      this.lineTo(this.mouseX, this.mouseY);
     }
   }
 
@@ -165,8 +172,16 @@ class Canvas {
   drawWithTouch(event) {
     if (this.startState) {
       this.getTouchLocation(event);
-      this.context.lineTo(this.touchX, this.touchY);
-      this.context.stroke();
+      this.lineTo(this.touchX, this.touchY);
     }
+  }
+
+  /**
+   * @param {number} x
+   * @param {number} y
+   */
+  lineTo(x, y) {
+    this.context.lineTo(x, y);
+    this.context.stroke();
   }
 }
