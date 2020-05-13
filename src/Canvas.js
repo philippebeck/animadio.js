@@ -9,16 +9,13 @@ class Canvas {
     this.startState = false;
     this.endState   = false;
 
+    this.line  = null;
+    this.color = null;
+
     this.mouseX = 0;
     this.mouseY = 0;
     this.touchX = 0;
     this.touchY = 0;
-
-    this.lineMaker  = null;
-    this.colorMaker = null;
-
-    this.line   = line;
-    this.color  = color;
 
     this.canvas   = document.getElementById("canvas");
     this.context  = this.canvas.getContext("2d");
@@ -28,7 +25,7 @@ class Canvas {
 
     this.initCanvas(width, height);
     this.initOptions();
-    this.initContext(this.line, this.color);
+    this.initContext(line, color);
     this.initDraw();
   }
 
@@ -43,14 +40,22 @@ class Canvas {
 
   initOptions() {
     if (document.getElementById("canvas-line")) {
-      this.lineMaker = document.getElementById("canvas-line");
-      this.lineMaker.addEventListener("input", this.setLine.bind(this));
+      this.line = document.getElementById("canvas-line");
+      this.line.addEventListener("input", this.setLine.bind(this));
     }
 
     if (document.getElementById("canvas-color")) {
-      this.colorMaker = document.getElementById("canvas-color");
-      this.colorMaker.addEventListener("input", this.setColor.bind(this));
+      this.color = document.getElementById("canvas-color");
+      this.color.addEventListener("input", this.setColor.bind(this));
     }
+  }
+
+  setLine() {
+    this.context.lineWidth = this.line.value;
+  }
+
+  setColor() {
+    this.context.strokeStyle = this.color.value;
   }
 
   /**
@@ -65,25 +70,15 @@ class Canvas {
   }
 
   initDraw() {
-    this.canvas.addEventListener("mousedown", this.moveWithMouse.bind(this));
+    this.canvas.addEventListener("mousedown", this.moveInCanvas.bind(this, "mousedown"));
     this.canvas.addEventListener("mousemove", this.drawWithMouse.bind(this));
     this.canvas.addEventListener("mouseup", this.stopDrawing.bind(this));
     this.canvas.addEventListener("mouseout", this.stopDrawing.bind(this));
 
-    this.canvas.addEventListener("touchstart", this.moveWithTouch.bind(this));
+    this.canvas.addEventListener("touchstart", this.moveInCanvas.bind(this, "touchstart"));
     this.canvas.addEventListener("touchmove", this.drawWithTouch.bind(this));
     this.canvas.addEventListener("touchend", this.stopDrawing.bind(this));
     this.canvas.addEventListener("touchcancel", this.stopDrawing.bind(this));
-  }
-
-  setLine() {
-    this.line = this.lineMaker.value;
-    this.initContext(this.line, this.color);
-  }
-
-  setColor() {
-    this.color = this.colorMaker.value;
-    this.initContext(this.line, this.color);
   }
 
   startDrawing() {
@@ -120,22 +115,37 @@ class Canvas {
 
   /**
    * @param {object} event
+   * @param {string} type
+   */
+  moveInCanvas(event, type) {
+    this.startDrawing();
+
+    switch (type) {
+      case "mousedown":
+        this.moveWithMouse(event);
+        event.preventDefault();
+        break;
+      case "touchstart":
+        this.moveWithTouch(event);
+        event.preventDefault();
+        break;
+    }
+  }
+
+  /**
+   * @param {object} event
    */
   moveWithMouse(event) {
-    this.startDrawing();
     this.getMouseLocation(event);
     this.context.moveTo(this.mouseX, this.mouseY);
-    event.preventDefault();
   }
 
   /**
    * @param {object} event
    */
   moveWithTouch(event) {
-    this.startDrawing();
     this.getTouchLocation(event);
     this.context.moveTo(this.touchX, this.touchY);
-    event.preventDefault();
   }
 
   /**
