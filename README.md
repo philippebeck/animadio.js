@@ -40,7 +40,7 @@ Yarn : `yarn add animadio.js`
 
 [![jsDelivr Weekly Downloads](https://img.shields.io/jsdelivr/npm/hw/animadio.js.svg?label=jsDelivr+Montly+Downloads)](https://www.jsdelivr.com/package/npm/animadio.js)
 
--   Development only for the moment : [https://cdn.jsdelivr.net/npm/animadio.js@0.1.17/dist/animadio.js](https://cdn.jsdelivr.net/npm/animadio.js@0.1.17/dist/animadio.js)  
+-   Development only for the moment : [https://cdn.jsdelivr.net/npm/animadio.js@0.1.18/dist/animadio.js](https://cdn.jsdelivr.net/npm/animadio.js@0.1.18/dist/animadio.js)  
 
 ---
 

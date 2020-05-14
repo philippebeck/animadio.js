@@ -1,4 +1,4 @@
-/*! animadio.js v0.1.17 | https://animadio.org | MIT License */
+/*! animadio.js v0.1.18 | https://animadio.org | MIT License */
 
 "use strict";
 
@@ -15,6 +15,11 @@ class Animadio {
   static canvas(width = 500, height = 500, line = 2, color = "navy") {
     new Canvas(width, height, line, color);
   }
+
+  static ajax(url, callback = null, data = null) {
+    new Ajax(url, callback, data);
+  }
+
 }
 
 class Input {
@@ -505,5 +510,77 @@ class Canvas {
   }
 }
 
+class Ajax {
+  /**
+   * @param {string} url
+   * @param {function} callback
+   * @param {object} data
+   */
+  constructor(url, callback = null, data = null) {
+    this.request = new XMLHttpRequest();
+
+    this.url      = url;
+    this.callback = callback;
+    this.data     = data;
+
+    this.setCallback();
+    this.setAjax();
+  }
+
+  setCallback() {
+    if (this.callback === null) {
+      this.callback = this.showResponse;
+    }
+  }
+
+  /**
+   * @param response
+   */
+  showResponse(response) {
+    console.log(response);
+  }
+
+  setAjax() {
+    if (this.data) {
+      this.ajaxPost();
+    } else {
+      this.ajaxGet();
+    }
+  }
+
+  ajaxGet() {
+    this.request.open("GET", this.url);
+    this.runAjax();
+  }
+
+  ajaxPost() {
+    this.request.open("POST", this.url);
+    this.runAjax();
+  }
+
+  runAjax() {
+    this.listenAjax();
+    this.request.send(this.data);
+  }
+
+  listenAjax() {
+    this.request.addEventListener("load", this.listenLoad.bind(this));
+    this.request.addEventListener("error", this.listenError.bind(this));
+  }
+
+  listenLoad() {
+    if (this.request.status >= 200 && this.request.status < 400) {
+      this.callback(this.request.responseText);
+
+    } else {
+      console.error(this.request.status + " " + this.request.statusText + " " + this.url);
+    }
+  }
+
+  listenError() {
+    console.error("Network Error @URL => " + this.url);
+  }
+}
+
 /*! Author: Philippe Beck <philippe@philippebeck.net>
- Updated: 13th May 2020 @ 6:22:11 PM */
+ Updated: 14th May 2020 @ 8:32:09 PM */
