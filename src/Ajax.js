@@ -3,13 +3,15 @@ class Ajax {
    * @param {string} url
    * @param {function} callback
    * @param {object} data
+   * @param {boolean} isJson
    */
-  constructor(url, callback = null, data = null) {
+  constructor(url, callback = null, data = null, isJson = true) {
     this.request = new XMLHttpRequest();
 
     this.url      = url;
     this.callback = callback;
     this.data     = data;
+    this.isJson   = isJson;
 
     this.setCallback();
     this.setAjax();
@@ -30,25 +32,33 @@ class Ajax {
 
   setAjax() {
     if (this.data) {
-      this.ajaxPost();
+      this.postAjax();
     } else {
-      this.ajaxGet();
+      this.getAjax();
     }
   }
 
-  ajaxGet() {
+  getAjax() {
     this.request.open("GET", this.url);
     this.runAjax();
   }
 
-  ajaxPost() {
+  postAjax() {
     this.request.open("POST", this.url);
     this.runAjax();
   }
 
   runAjax() {
     this.listenAjax();
+    this.checkJson();
     this.request.send(this.data);
+  }
+
+  checkJson() {
+    if (this.data && this.isJson) {
+      this.request.setRequestHeader("Content-Type", "application/json");
+      this.data = JSON.stringify(this.data);
+    }
   }
 
   listenAjax() {
