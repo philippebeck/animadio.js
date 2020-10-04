@@ -2,6 +2,7 @@
 # [Animadio.js](https://animadio.js)
 
 [![GitHub Version](https://img.shields.io/github/package-json/v/animadio/animadio.js.svg?label=Version)](https://github.com/animadio/animadio.js/blob/master/package.json)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/aa32d2ebd62148c0ba590c4132531119)](https://www.codacy.com/gh/animadio/animadio.js/dashboard)
 [![Maintainability](https://api.codeclimate.com/v1/badges/8338ea61deda5a6218db/maintainability)](https://codeclimate.com/github/animadio/animadio.js/maintainability)
 
 ## Overview
@@ -28,8 +29,8 @@ This is the JavaScript Package for the CSS Framework Animadio !
 
 ## Package Manager
 
-[![NPM Version](https://img.shields.io/npm/v/animadio.js.svg?label=NPM)](https://www.npmjs.com/package/animadio.js)
-[![NPM Weekly Downloads](https://img.shields.io/npm/dw/animadio.js.svg?label=Weekly+Downloads)](https://www.npmjs.com/package/animadio.js)
+[![NPM Montly Downloads](https://img.shields.io/npm/dm/animadio.js.svg?label=Montly+Downloads)](https://www.npmjs.com/package/animadio.js)
+[![NPM Yearly Downloads](https://img.shields.io/npm/dy/animadio.js.svg?label=Yearly+Downloads)](https://www.npmjs.com/package/animadio.js)
 
 NPM : `npm i animadio.js`  
 Yarn : `yarn add animadio.js`  
@@ -38,7 +39,8 @@ Yarn : `yarn add animadio.js`
 
 ## CDN 
 
-[![jsDelivr Weekly Downloads](https://img.shields.io/jsdelivr/npm/hw/animadio.js.svg?label=jsDelivr+Montly+Downloads)](https://www.jsdelivr.com/package/npm/animadio.js)
+[![jsDelivr Montly Downloads](https://img.shields.io/jsdelivr/npm/hm/animadio.js.svg?label=jsDelivr+Montly+Downloads)](https://www.jsdelivr.com/package/npm/animadio.js)
+[![jsDelivr Yearly Downloads](https://img.shields.io/jsdelivr/npm/hy/animadio.js.svg?label=jsDelivr+Yearly+Downloads)](https://www.jsdelivr.com/package/npm/animadio.js)
 
 -   Development only for the moment : [https://cdn.jsdelivr.net/npm/animadio.js@0.1.18/dist/animadio.js](https://cdn.jsdelivr.net/npm/animadio.js@0.1.18/dist/animadio.js)  
 
