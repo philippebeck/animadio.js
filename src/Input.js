@@ -54,10 +54,10 @@ class Input {
     for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
       this.inputs[inputIndex].setAttribute("disabled", true);
     }
-    this.AddClasses();
+    this.addClasses();
   }
 
-  AddClasses() {
+  addClasses() {
     for (let inputIndex = 0; inputIndex < this.inputCount; inputIndex++) {
       if (this.inputs[inputIndex].value) {
         this.toggleClass(inputIndex);
