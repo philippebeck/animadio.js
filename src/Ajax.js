@@ -27,7 +27,7 @@ class Ajax {
    * @param response
    */
   showResponse(response) {
-    console.log(response);
+    alert(response);
   }
 
   setAjax() {
@@ -71,11 +71,11 @@ class Ajax {
       this.callback(this.request.responseText);
 
     } else {
-      console.error(this.request.status + " " + this.request.statusText + " " + this.url);
+      alert(this.request.status + " " + this.request.statusText + " " + this.url);
     }
   }
 
   listenError() {
-    console.error("Network Error @URL => " + this.url);
+    alert("Network Error @URL => " + this.url);
   }
 }
