@@ -128,7 +128,7 @@ class Slider {
 
   checkRandom() {
     if (this.randomState) {
-      this.setRandom(false, "Random", "fa-random", "fa-long-arrow-alt-right")
+      this.setRandom(false, "Random", "fa-random", "fa-long-arrow-alt-right");
 
     } else {
       this.setRandom(true, "Normal", "fa-long-arrow-alt-right", "fa-random");
